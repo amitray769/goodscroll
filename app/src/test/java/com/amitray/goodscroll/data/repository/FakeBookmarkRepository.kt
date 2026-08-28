@@ -61,6 +61,13 @@ class FakeBookmarkRepository : BookmarkRepository {
         return AddBookmarkResult.Added(bookmark.id)
     }
 
+    override suspend fun updateMetadata(
+        id: Long,
+        title: String,
+        excerpt: String?,
+        imageUrl: String?,
+    ) = update(id) { it.copy(title = title, excerpt = excerpt, imageUrl = imageUrl) }
+
     override suspend fun deleteBookmark(id: Long) {
         bookmarks.value = bookmarks.value.filterNot { it.id == id }
     }

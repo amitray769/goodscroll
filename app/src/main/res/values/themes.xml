@@ -2,4 +2,16 @@
 <resources>
 
     <style name="Theme.GoodScroll" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!--
+      The share target floats over whatever app the user shared from, so the window itself must be
+      transparent and must not animate in like a full screen activity.
+    -->
+    <style name="Theme.GoodScroll.Transparent" parent="Theme.GoodScroll">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 </resources>
