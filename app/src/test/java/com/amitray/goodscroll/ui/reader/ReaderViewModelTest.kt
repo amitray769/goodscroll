@@ -3,6 +3,7 @@ package com.amitray.goodscroll.ui.reader
 import com.amitray.goodscroll.data.local.Bookmark
 import com.amitray.goodscroll.data.repository.FakeBookmarkRepository
 import com.amitray.goodscroll.data.repository.SortOrder
+import com.amitray.goodscroll.reminder.FakeReminderScheduler
 import com.amitray.goodscroll.util.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -27,12 +28,14 @@ class ReaderViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var repository: FakeBookmarkRepository
+    private lateinit var scheduler: FakeReminderScheduler
     private lateinit var viewModel: ReaderViewModel
 
     @Before
     fun setUp() {
         repository = FakeBookmarkRepository()
-        viewModel = ReaderViewModel(repository)
+        scheduler = FakeReminderScheduler()
+        viewModel = ReaderViewModel(repository, scheduler)
     }
 
     @Test
@@ -144,6 +147,52 @@ class ReaderViewModelTest {
             listOf(ReaderEvent.ReminderSet(1_700_000_000_000L), ReaderEvent.ReminderCleared),
             events,
         )
+    }
+
+    @Test
+    fun `setting a reminder schedules work for that deadline and clearing cancels it`() = runTest {
+        repository.setBookmarks(old)
+        collectUiState()
+
+        viewModel.setReminder(old.id, epochMillis = 1_700_000_000_000L)
+        viewModel.clearReminder(old.id)
+
+        assertEquals(
+            listOf(
+                FakeReminderScheduler.Call.Schedule(old.id, 1_700_000_000_000L),
+                FakeReminderScheduler.Call.Cancel(old.id),
+            ),
+            scheduler.calls,
+        )
+    }
+
+    @Test
+    fun `the deadline is already persisted when the reminder is scheduled`() = runTest {
+        repository.setBookmarks(old)
+        collectUiState()
+        var persistedAtScheduleTime: Long? = null
+        scheduler.onSchedule = { id, _ ->
+            persistedAtScheduleTime = repository.currentBookmarks().first { it.id == id }
+                .reminderDeadline
+        }
+
+        viewModel.setReminder(old.id, epochMillis = 1_700_000_000_000L)
+
+        assertEquals(
+            "the database must be the source of truth before the worker can read it",
+            1_700_000_000_000L,
+            persistedAtScheduleTime,
+        )
+    }
+
+    @Test
+    fun `deleting a bookmark cancels any reminder scheduled for it`() = runTest {
+        repository.setBookmarks(old)
+        collectUiState()
+
+        viewModel.deleteBookmark(old.id)
+
+        assertEquals(listOf(FakeReminderScheduler.Call.Cancel(old.id)), scheduler.calls)
     }
 
     /**
