@@ -5,11 +5,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission
-        android:name="android.permission.SCHEDULE_EXACT_ALARM"
-        android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!--
+      Reminders run on WorkManager, not AlarmManager, so SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM
+      are deliberately not declared: a reading nudge does not need exact delivery, and USE_EXACT_ALARM
+      would drag the app into Play Store exact-alarm policy review for no user benefit.
+
+      RECEIVE_BOOT_COMPLETED is likewise not declared here. WorkManager persists its queue and
+      re-enqueues after a reboot through its own receiver, which the work-runtime manifest declares
+      (and which therefore still merges the permission in). An app-level boot receiver rescheduling
+      pending reminders would duplicate that machinery.
+    -->
 
     <application
         android:name=".GoodScrollApplication"
@@ -26,11 +32,29 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.GoodScroll">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.share.ShareReceiverActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/share_target_label"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.GoodScroll.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 

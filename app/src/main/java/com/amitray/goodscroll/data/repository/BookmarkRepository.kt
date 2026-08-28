@@ -33,6 +33,9 @@ interface BookmarkRepository {
         imageUrl: String? = null,
     ): AddBookmarkResult
 
+    /** Fills in the title, excerpt and image scraped from the page after the link was saved. */
+    suspend fun updateMetadata(id: Long, title: String, excerpt: String?, imageUrl: String?)
+
     suspend fun deleteBookmark(id: Long)
 
     suspend fun markAsRead(id: Long)

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Reminder and notification strings live in their own file so the feature can evolve without
+  touching the shared strings.xml. Android merges every values/*.xml at build time.
+-->
+<resources>
+    <string name="reminder_channel_name">Reading reminders</string>
+    <string name="reminder_channel_description">Nudges you when a saved link is due to be read.</string>
+    <string name="reminder_notification_subtext">Time to read</string>
+    <string name="reminder_notification_fallback_body">Your saved link is ready to read.</string>
+
+    <string name="reminder_picker_title">Remind me to read this</string>
+    <string name="reminder_picker_next">Next</string>
+    <string name="reminder_picker_back">Back</string>
+    <string name="reminder_picker_confirm">Set reminder</string>
+    <string name="reminder_picker_cancel">Cancel</string>
+    <string name="reminder_picker_clear">Remove reminder</string>
+    <string name="reminder_picker_pick_date">Pick a day</string>
+    <string name="reminder_picker_pick_time">Pick a time</string>
+    <string name="reminder_picker_past_warning">That time has already passed, so the reminder will arrive right away.</string>
+</resources>
