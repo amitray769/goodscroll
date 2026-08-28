@@ -1,6 +1,5 @@
 package com.amitray.goodscroll
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -33,7 +32,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        focusedBookmarkId = bookmarkIdFrom(intent)
+        focusedBookmarkId = OpenBookmarkIntent.bookmarkIdFrom(intent)
 
         setContent {
             GoodScrollTheme {
@@ -53,31 +52,6 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        bookmarkIdFrom(intent)?.let { focusedBookmarkId = it }
-    }
-
-    companion object {
-        /** Distinguishes an "open this bookmark" launch from the launcher icon. */
-        const val ACTION_OPEN_BOOKMARK = "com.amitray.goodscroll.action.OPEN_BOOKMARK"
-
-        /** `Long` extra holding [com.amitray.goodscroll.data.local.Bookmark.id]. */
-        const val EXTRA_BOOKMARK_ID = "com.amitray.goodscroll.extra.BOOKMARK_ID"
-
-        private const val NO_BOOKMARK_ID = -1L
-
-        fun openBookmarkIntent(context: Context, bookmarkId: Long): Intent =
-            Intent(context, MainActivity::class.java).apply {
-                action = ACTION_OPEN_BOOKMARK
-                putExtra(EXTRA_BOOKMARK_ID, bookmarkId)
-                // CLEAR_TOP keeps one reader task rather than stacking an activity per share.
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }
-
-        /** The bookmark [intent] wants opened, or null when it is an ordinary launch. */
-        fun bookmarkIdFrom(intent: Intent?): Long? {
-            if (intent?.action != ACTION_OPEN_BOOKMARK) return null
-            return intent.getLongExtra(EXTRA_BOOKMARK_ID, NO_BOOKMARK_ID)
-                .takeIf { it != NO_BOOKMARK_ID }
-        }
+        OpenBookmarkIntent.bookmarkIdFrom(intent)?.let { focusedBookmarkId = it }
     }
 }

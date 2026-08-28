@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
+import com.amitray.goodscroll.OpenBookmarkIntent
 import com.amitray.goodscroll.R
 import com.amitray.goodscroll.data.local.Bookmark
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -76,7 +77,7 @@ class SystemReminderNotifier @Inject constructor(
      */
     private fun openBookmarkIntent(bookmarkId: Long): PendingIntent {
         val stack = TaskStackBuilder.create(context)
-            .addNextIntentWithParentStack(ReminderDeepLink.createIntent(context, bookmarkId))
+            .addNextIntentWithParentStack(OpenBookmarkIntent.createIntent(context, bookmarkId))
         return checkNotNull(
             stack.getPendingIntent(
                 // Per-bookmark request code, otherwise a second reminder would reuse the first

@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.amitray.goodscroll.MainActivity
+import com.amitray.goodscroll.OpenBookmarkIntent
 import com.amitray.goodscroll.ui.theme.GoodScrollTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -40,7 +40,7 @@ class ShareReceiverActivity : ComponentActivity() {
                 ShareConfirmation(
                     status = status,
                     onReadNow = { bookmarkId ->
-                        startActivity(MainActivity.openBookmarkIntent(this, bookmarkId))
+                        startActivity(OpenBookmarkIntent.createIntent(this, bookmarkId))
                         finish()
                     },
                     onDismiss = ::finish,
