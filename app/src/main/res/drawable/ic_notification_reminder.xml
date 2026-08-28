@@ -1,0 +1,17 @@
+<!--
+  Status-bar icon: a bookmark with a clock. Notification small icons are drawn as a mask, so this
+  is a single opaque white path on transparent, with the 24dp keyline padding baked in.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFFFF">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12.5,3H6.5C5.67,3 5,3.67 5,4.5v15.06c0,0.57 0.62,0.93 1.12,0.65L11,17.44l1.62,0.92c-0.64,-0.86 -1.02,-1.93 -1.02,-3.09c0,-2.86 2.32,-5.18 5.18,-5.18c0.63,0 1.24,0.12 1.8,0.33V4.5C18.58,3.67 17.91,3 17.08,3H12.5z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M16.78,11.59c-2.05,0 -3.72,1.67 -3.72,3.72S14.73,19.03 16.78,19.03s3.72,-1.67 3.72,-3.72S18.83,11.59 16.78,11.59zM18.2,16.94l-1.98,-1.22v-2.42h0.93v1.93l1.54,0.93L18.2,16.94z" />
+</vector>

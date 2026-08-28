@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.amitray.goodscroll.data.repository.AddBookmarkResult
 import com.amitray.goodscroll.data.repository.BookmarkRepository
 import com.amitray.goodscroll.data.repository.SortOrder
+import com.amitray.goodscroll.reminder.ReminderScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class ReaderViewModel @Inject constructor(
     private val bookmarkRepository: BookmarkRepository,
+    private val reminderScheduler: ReminderScheduler,
 ) : ViewModel() {
 
     private val sortOrder = MutableStateFlow(SortOrder.NEWEST_FIRST)
@@ -68,6 +70,9 @@ class ReaderViewModel @Inject constructor(
     fun deleteBookmark(id: Long) {
         viewModelScope.launch {
             bookmarkRepository.deleteBookmark(id)
+            // The worker also no-ops on a missing bookmark, but dropping the work avoids waking
+            // the device for a link that no longer exists.
+            reminderScheduler.cancel(id)
             eventChannel.send(ReaderEvent.BookmarkDeleted)
         }
     }
@@ -76,10 +81,15 @@ class ReaderViewModel @Inject constructor(
         viewModelScope.launch { bookmarkRepository.markAsRead(id) }
     }
 
+    /**
+     * Persists first, then schedules: the database is the source of truth and the worker re-reads
+     * it, so a reminder that is stored but somehow never scheduled is recoverable, while one that
+     * fires without a stored deadline would notify about nothing.
+     */
     fun setReminder(id: Long, epochMillis: Long) {
         viewModelScope.launch {
             bookmarkRepository.setReminder(id, epochMillis)
-            // TODO(Step 6): schedule the WorkManager reminder for this bookmark here.
+            reminderScheduler.schedule(id, epochMillis)
             eventChannel.send(ReaderEvent.ReminderSet(epochMillis))
         }
     }
@@ -87,7 +97,7 @@ class ReaderViewModel @Inject constructor(
     fun clearReminder(id: Long) {
         viewModelScope.launch {
             bookmarkRepository.clearReminder(id)
-            // TODO(Step 6): cancel the scheduled WorkManager reminder for this bookmark here.
+            reminderScheduler.cancel(id)
             eventChannel.send(ReaderEvent.ReminderCleared)
         }
     }
