@@ -60,8 +60,14 @@ class SystemReminderNotifier @Inject constructor(
             .setContentIntent(openBookmarkIntent(bookmark.id))
             .build()
 
-        notificationManager.notify(notificationId(bookmark.id), notification)
-        return true
+        // The permission can be revoked between canPostNotifications() and here, and lint cannot
+        // see the check through that helper anyway, so the throw is handled rather than assumed away.
+        return try {
+            notificationManager.notify(notificationId(bookmark.id), notification)
+            true
+        } catch (_: SecurityException) {
+            false
+        }
     }
 
     /**
