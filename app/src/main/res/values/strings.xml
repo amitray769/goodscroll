@@ -1,3 +1,55 @@
 <resources>
     <string name="app_name">Good Scroll</string>
+
+    <!-- Reader -->
+    <string name="reader_title">Good Scroll</string>
+    <string name="reader_loading">Loading your reads</string>
+    <string name="reader_position">%1$d of %2$d</string>
+    <string name="reader_swipe_hint">Swipe right for the next read</string>
+    <string name="reader_read_badge">Read</string>
+    <string name="reader_saved_prefix">Saved %1$s</string>
+    <string name="reader_open_article">Open article</string>
+    <string name="reader_no_preview">No preview was saved for this link. Open the article to read
+        it in full.</string>
+
+    <!-- Reader actions -->
+    <string name="reader_sort_newest_first">Newest first</string>
+    <string name="reader_sort_oldest_first">Oldest first</string>
+    <string name="reader_action_sort">Change order</string>
+    <string name="reader_action_more">More actions</string>
+    <string name="reader_action_delete">Delete</string>
+    <string name="reader_action_remind">Remind me later</string>
+    <string name="reader_delete_title">Delete this read?</string>
+    <string name="reader_delete_message">“%1$s” will be removed from your library.</string>
+    <string name="reader_delete_confirm">Delete</string>
+    <string name="reader_delete_cancel">Cancel</string>
+
+    <!-- Reader empty state -->
+    <string name="reader_empty_title">Nothing to read yet</string>
+    <string name="reader_empty_body">Good Scroll is where the links you would have doomscrolled
+        past come to be read properly, one at a time.</string>
+    <string name="reader_empty_step_one">Find something worth reading in your browser or feed.</string>
+    <string name="reader_empty_step_two">Tap Share and pick Good Scroll.</string>
+    <string name="reader_empty_step_three">Come back here and swipe through your reads.</string>
+
+    <!-- Snackbars -->
+    <string name="snackbar_bookmark_added">Saved to Good Scroll</string>
+    <string name="snackbar_bookmark_already_saved">Already saved</string>
+    <string name="snackbar_bookmark_deleted">Deleted</string>
+    <string name="snackbar_reminder_set">Reminder set</string>
+    <string name="snackbar_reminder_cleared">Reminder cleared</string>
+    <string name="snackbar_no_link_found">No link found in what you shared</string>
+    <string name="snackbar_cannot_open_article">No app can open this link</string>
+
+    <!-- Share confirmation -->
+    <string name="share_target_label">Save to Good Scroll</string>
+    <string name="share_saving">Saving…</string>
+    <string name="share_saved_title">Saved for later</string>
+    <string name="share_already_saved_title">Already in your library</string>
+    <string name="share_no_link_title">No link found</string>
+    <string name="share_no_link_body">Good Scroll saves web links. What you shared did not contain
+        one, so nothing was saved.</string>
+    <string name="share_read_now">Read now</string>
+    <string name="share_done">Done</string>
+    <string name="share_close">Close</string>
 </resources>
