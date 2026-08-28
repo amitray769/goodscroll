@@ -56,6 +56,15 @@ class BookmarkRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateMetadata(
+        id: Long,
+        title: String,
+        excerpt: String?,
+        imageUrl: String?,
+    ) = withContext(ioDispatcher) {
+        bookmarkDao.updateMetadata(id, title, excerpt, imageUrl)
+    }
+
     override suspend fun deleteBookmark(id: Long) = withContext(ioDispatcher) {
         bookmarkDao.deleteById(id)
     }

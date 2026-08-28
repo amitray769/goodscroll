@@ -67,4 +67,13 @@ interface BookmarkDao {
 
     @Query("UPDATE bookmarks SET isRead = :isRead WHERE id = :id")
     suspend fun setRead(id: Long, isRead: Boolean)
+
+    /**
+     * Overwrites the scraped fields once the shared page has been read. Saving happens first with a
+     * fallback title so a flaky network can never lose a bookmark; this fills in the details after.
+     */
+    @Query(
+        "UPDATE bookmarks SET title = :title, excerpt = :excerpt, imageUrl = :imageUrl WHERE id = :id"
+    )
+    suspend fun updateMetadata(id: Long, title: String, excerpt: String?, imageUrl: String?)
 }
